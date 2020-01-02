@@ -33,7 +33,12 @@
     <string name="time_interval">time interval</string>
     <string name="save">save</string>
     <string name="settings">settings</string>
-    <string name="edit_fragment_name_error">Please insert a name</string>
-    <string name="edit_fragment_start_end_error">End can not be before start</string>
+    <string name="add_edit_name_error">Please insert a name</string>
+    <string name="add_edit_start_end_error">End can not be before start</string>
     <string name="created">Created</string>
+    <string name="itemDelete">Item deleted</string>
+    <string name="delete_all_items">Delete all items</string>
+    <string name="main_update_toast">Item updated</string>
+    <string name="main_cant_update_error_toast">Item can not be updated</string>
+    <string name="main_delete_all_toast">All items deleted</string>
 </resources>
