@@ -6,4 +6,8 @@
         android:icon="@drawable/ic_settings"
         android:title="@string/settings"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/main_activity_menu_delete_all_time_instances"
+        android:title="@string/delete_all_items"
+        app:showAsAction="never"/>
 </menu>
