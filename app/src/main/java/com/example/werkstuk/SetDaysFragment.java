@@ -1,6 +1,5 @@
-package com.example.werkstuk.Fragments;
+package com.example.werkstuk;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.werkstuk.AddTimeInstanceActivity;
 import com.example.werkstuk.R;
 
 public class SetDaysFragment extends Fragment {
