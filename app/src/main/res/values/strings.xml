@@ -32,4 +32,8 @@
     <string name="none">None</string>
     <string name="time_interval">time interval</string>
     <string name="save">save</string>
+    <string name="settings">settings</string>
+    <string name="edit_fragment_name_error">Please insert a name</string>
+    <string name="edit_fragment_start_end_error">End can not be before start</string>
+    <string name="created">Created</string>
 </resources>
