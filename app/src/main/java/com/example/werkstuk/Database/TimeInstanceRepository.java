@@ -33,9 +33,14 @@ public class TimeInstanceRepository {
         new DeleteTimeInstaceAsync(timeInstanceDAO).execute(timeInstance);
     }
 
+    public void deleteAll() {
+        new DeleteAllTimeInstaceAsync(timeInstanceDAO).execute();
+    }
+
     public LiveData<List<TimeInstance>> getAllTimeInstances() {
         return timeInstancesList;
     }
+
 
     private static class InserTimeInstaceAsync extends AsyncTask<TimeInstance, Void, Void>{
 
@@ -76,6 +81,20 @@ public class TimeInstanceRepository {
         @Override
         protected Void doInBackground(TimeInstance... timeInstances) {
             timeInstanceDAO.delete(timeInstances[0]);
+            return null;
+        }
+    }
+    private static class DeleteAllTimeInstaceAsync extends AsyncTask<TimeInstance, Void, Void>{
+
+        private TimeInstanceDAO timeInstanceDAO;
+
+        public DeleteAllTimeInstaceAsync(TimeInstanceDAO timeInstanceDAO) {
+            this.timeInstanceDAO = timeInstanceDAO;
+        }
+
+        @Override
+        protected Void doInBackground(TimeInstance... timeInstances) {
+            timeInstanceDAO.deleteAll();
             return null;
         }
     }

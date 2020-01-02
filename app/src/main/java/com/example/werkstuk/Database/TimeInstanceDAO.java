@@ -25,4 +25,7 @@ public interface TimeInstanceDAO {
 
     @Query("SELECT * FROM timeInstance_table")
     LiveData<List<TimeInstance>> getAllTimeInstances();
+
+    @Query("DELETE FROM timeInstance_table")
+    void deleteAll();
 }

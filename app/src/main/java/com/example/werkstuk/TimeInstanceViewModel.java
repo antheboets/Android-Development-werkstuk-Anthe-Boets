@@ -34,6 +34,10 @@ public class TimeInstanceViewModel extends AndroidViewModel {
         repository.delete(timeInstance);
     }
 
+    public void deleteAll(){
+        repository.deleteAll();
+    }
+
     public LiveData<List<TimeInstance>> getAllTimeInstances(){
         return timeInstacneList;
     }
