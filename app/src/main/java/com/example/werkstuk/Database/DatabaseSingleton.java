@@ -13,7 +13,7 @@ import com.example.werkstuk.TimeInstance;
 
 import java.util.Date;
 
-@Database(entities = {TimeInstance.class}, version = 3)
+@Database(entities = {TimeInstance.class}, version = 4)
 public abstract class DatabaseSingleton extends RoomDatabase {
 
     private static DatabaseSingleton instance;
@@ -45,9 +45,9 @@ public abstract class DatabaseSingleton extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            timeInstanceDAO.insert(new TimeInstance(true, "thuis naar station", new Date(),new Date(),true,true,true,true,true,false,false));
+            /*timeInstanceDAO.insert(new TimeInstance(true, "thuis naar station", new Date(),new Date(),true,true,true,true,true,false,false));
             timeInstanceDAO.insert(new TimeInstance(false, "misc", new Date(),new Date(),false,false,false,false,false,true,true));
-            timeInstanceDAO.insert(new TimeInstance(false, "misc", new Date(),new Date(),false,true,true,false,true,false,true));
+            timeInstanceDAO.insert(new TimeInstance(false, "misc", new Date(),new Date(),false,true,true,false,true,false,true));*/
             return null;
         }
     }
