@@ -90,6 +90,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, EDIT_TIME_INSTANCE_REQUEST);
             }
         });
+
+        adapter.setOnSwitchChange(new TimeInstaceAdapter.OnSwitchChangeListener() {
+
+            @Override
+            public void onSwitchChange(TimeInstance timeInstance) {
+                timeInstanceViewModel.update(timeInstance);
+            }
+        });
         /*
         timeInstanceListFragment = new TimeInstanceListFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.mainActivityFragment, timeInstanceListFragment).commit();
