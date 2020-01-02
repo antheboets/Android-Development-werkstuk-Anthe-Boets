@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(AddEditTimeInstanceActivity.EXTRA_START, timeInstance.getStart().getTime());
                 intent.putExtra(AddEditTimeInstanceActivity.EXTRA_END, timeInstance.getEnd().getTime());
                 intent.putExtra(AddEditTimeInstanceActivity.EXTRA_DAYS, timeInstance.getDaysArray());
-                int i = timeInstance.getIntfromEnum();
                 intent.putExtra(AddEditTimeInstanceActivity.EXTRA_TIMEINTERVAL, timeInstance.getIntfromEnum());
                 startActivityForResult(intent, EDIT_TIME_INSTANCE_REQUEST);
             }

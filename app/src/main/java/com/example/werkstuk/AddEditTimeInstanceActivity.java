@@ -70,9 +70,7 @@ public class AddEditTimeInstanceActivity extends AppCompatActivity {
             timePickerEnd.setCurrentMinute(end.getMinutes());
             timePickerEnd.setCurrentHour(end.getHours());
 
-
-            int i = intent.getIntExtra(EXTRA_TIMEINTERVAL,0);
-            numberPicker.setValue(i);
+            numberPicker.setValue(intent.getIntExtra(EXTRA_TIMEINTERVAL,0));
 
         }
         else {
