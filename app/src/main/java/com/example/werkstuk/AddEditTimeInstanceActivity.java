@@ -15,8 +15,9 @@ import android.widget.Toast;
 
 import java.util.Date;
 
-public class AddTimeInstanceActivity extends AppCompatActivity {
+public class AddEditTimeInstanceActivity extends AppCompatActivity {
 
+    public static final String EXTRA_ID = "com.example.werkstuk.EXTRA_ID";
     public static final String EXTRA_NAME = "com.example.werkstuk.EXTRA_NAME";
     public static final String EXTRA_START = "com.example.werkstuk.EXTRA_START";
     public static final String EXTRA_END = "com.example.werkstuk.EXTRA_END";
@@ -38,6 +39,9 @@ public class AddTimeInstanceActivity extends AppCompatActivity {
         timePickerEnd = findViewById(R.id.edit_time_picker_end);
         numberPicker = findViewById(R.id.edit_number_picker_time_interval);
 
+        timePickerStart.setIs24HourView(true);
+        timePickerEnd.setIs24HourView(true);
+
         timePickerStart.setCurrentHour(0);
         timePickerStart.setCurrentMinute(0);
 
@@ -46,13 +50,34 @@ public class AddTimeInstanceActivity extends AppCompatActivity {
 
         String[] values = TimeInstance.getIntervalStringArray();
         numberPicker.setMinValue(0);
-        numberPicker.setMinValue(values.length - 1);
+        numberPicker.setMaxValue(values.length - 1);
         numberPicker.setDisplayedValues(values);
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
-        setTitle("Add Cloak");
+
+        Intent intent = getIntent();
 
 
+        if(intent.hasExtra(EXTRA_ID)){
+            setTitle("Edit Item");
+            textViewName.setText(intent.getStringExtra(EXTRA_NAME));
+            Date start = new Date(intent.getLongExtra(EXTRA_START,0));
+            Date end = new Date(intent.getLongExtra(EXTRA_END,0));
+
+            timePickerStart.setCurrentMinute(start.getMinutes());
+            timePickerStart.setCurrentHour(start.getHours());
+
+            timePickerEnd.setCurrentMinute(end.getMinutes());
+            timePickerEnd.setCurrentHour(end.getHours());
+
+
+            int i = intent.getIntExtra(EXTRA_TIMEINTERVAL,0);
+            numberPicker.setValue(i);
+
+        }
+        else {
+            setTitle("Add Item");
+        }
     }
 
 
@@ -85,15 +110,15 @@ public class AddTimeInstanceActivity extends AppCompatActivity {
         Date end = new Date(0);
         end.setHours(timePickerEnd.getCurrentHour());
         end.setMinutes(timePickerEnd.getCurrentMinute());
-        TimeInstance.EnumInterval enumInterval = TimeInstance.EnumInterval.intToEnumInterval(numberPicker.getValue());
+        int enumInterval = numberPicker.getValue();
         boolean[] days = new boolean[]{true, true, true, true, true, true, true};
 
         if (start.getTime() >= end.getTime()) {
-            Toast.makeText(this, R.string.edit_fragment_start_end_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.add_edit_start_end_error, Toast.LENGTH_SHORT).show();
             return;
         }
         if (name.trim().isEmpty()) {
-            Toast.makeText(this, R.string.edit_fragment_name_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.add_edit_name_error, Toast.LENGTH_SHORT).show();
             return;
         }
         /*
@@ -103,6 +128,12 @@ public class AddTimeInstanceActivity extends AppCompatActivity {
         */
 
         Intent data = new Intent();
+        int id = getIntent().getIntExtra(EXTRA_ID,-1);
+
+        if(id != -1){
+            data.putExtra(EXTRA_ID, id);
+        }
+
         data.putExtra(EXTRA_NAME, name);
         data.putExtra(EXTRA_START, start.getTime());
         data.putExtra(EXTRA_END, end.getTime());

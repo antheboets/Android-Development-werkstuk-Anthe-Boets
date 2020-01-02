@@ -12,7 +12,6 @@ import java.util.Date;
 public class TimeInstance {
 
 
-
     @PrimaryKey(autoGenerate = true)
     private int id;
 
@@ -22,6 +21,7 @@ public class TimeInstance {
     private Date end;
     private int interval;
 
+
     private boolean mo;
     private boolean tu;
     private boolean we;
@@ -30,7 +30,7 @@ public class TimeInstance {
     private boolean sa;
     private boolean su;
 
-    public enum EnumInterval{
+    public enum EnumInterval {
         ONEMINUTE,
         TWOMINUTES,
         FIVEMINUTES,
@@ -44,7 +44,7 @@ public class TimeInstance {
         SIXHOURS,
         TWELVEHOURS;
 
-    public static EnumInterval intToEnumInterval(int x){
+        public static EnumInterval intToEnumInterval(int x) {
             switch (x) {
                 case 0:
                     return ONEMINUTE;
@@ -59,7 +59,7 @@ public class TimeInstance {
                 case 5:
                     return HALFHOUR;
                 case 6:
-                     return ONEHOUR;
+                    return ONEHOUR;
                 case 7:
                     return TWOHOURS;
                 case 8:
@@ -75,93 +75,92 @@ public class TimeInstance {
         }
     }
 
-    private boolean isInWeekdays(){
-        if(!mo){
+    private boolean isInWeekdays() {
+        if (!mo) {
             return false;
         }
-        if(!tu){
+        if (!tu) {
             return false;
         }
-        if(!we){
+        if (!we) {
             return false;
         }
-        if(!th){
+        if (!th) {
             return false;
         }
-        if(!fr){
-            return false;
-        }
-        return true;
-    }
-
-    private boolean weekends(){
-        if(!sa){
-            return false;
-        }
-        if(!su){
-            return false;
-        }
-        return true;
-    }
-    private boolean everyDay(){
-        if(!mo){
-            return false;
-        }
-        if(!tu){
-            return false;
-        }
-        if(!we){
-            return false;
-        }
-        if(!th){
-            return false;
-        }
-        if(!fr){
-            return false;
-        }
-        if(!sa){
-            return false;
-        }
-        if(!su){
+        if (!fr) {
             return false;
         }
         return true;
     }
 
-    private String getDayStr(boolean firstItem, String dayString, boolean day){
-        if(day){
-            if(firstItem){
+    private boolean weekends() {
+        if (!sa) {
+            return false;
+        }
+        if (!su) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean everyDay() {
+        if (!mo) {
+            return false;
+        }
+        if (!tu) {
+            return false;
+        }
+        if (!we) {
+            return false;
+        }
+        if (!th) {
+            return false;
+        }
+        if (!fr) {
+            return false;
+        }
+        if (!sa) {
+            return false;
+        }
+        if (!su) {
+            return false;
+        }
+        return true;
+    }
+
+    private String getDayStr(boolean firstItem, String dayString, boolean day) {
+        if (day) {
+            if (firstItem) {
                 firstItem = false;
-                return  dayString;
-            }
-            else{
+                return dayString;
+            } else {
                 return ", " + dayString;
             }
         }
         return "";
     }
 
-    private boolean isFirstTime(boolean firstTime, String str){
-        if(!firstTime){
+    private boolean isFirstTime(boolean firstTime, String str) {
+        if (!firstTime) {
             return false;
         }
         return str.equals("");
     }
 
-    public String getDaysStr(){
+    public String getDaysStr() {
 
         String str = "";
         boolean firstItem = true;
 
-        if(everyDay()){
+        if (everyDay()) {
             return App.getAppResources().getString(R.string.every_day);
         }
 
-        if(isInWeekdays()){
+        if (isInWeekdays()) {
             str += App.getAppResources().getString(R.string.weekdays);
             firstItem = false;
-        }
-        else{
+        } else {
 
             str += getDayStr(firstItem, App.getAppResources().getString(R.string.mondayShort), mo);
             firstItem = isFirstTime(firstItem, str);
@@ -174,45 +173,48 @@ public class TimeInstance {
             str += getDayStr(firstItem, App.getAppResources().getString(R.string.fridayShort), fr);
             firstItem = isFirstTime(firstItem, str);
         }
-        if(weekends()){
-            if(firstItem){
+        if (weekends()) {
+            if (firstItem) {
                 str += App.getAppResources().getString(R.string.weekends);
                 firstItem = false;
-            }
-            else{
+            } else {
                 str = App.getAppResources().getString(R.string.weekends) + ", " + str;
             }
-        }
-        else{
+        } else {
             str += getDayStr(firstItem, App.getAppResources().getString(R.string.saturdayShort), sa);
             firstItem = isFirstTime(firstItem, str);
             str += getDayStr(firstItem, App.getAppResources().getString(R.string.sundayShort), su);
             firstItem = isFirstTime(firstItem, str);
         }
 
-        if(str.equals("")){
+        if (str.equals("")) {
             str = App.getAppResources().getString(R.string.never);
         }
         return str;
     }
-    public String getTimeStr(){
+
+    public boolean[] getDaysArray() {
+        return new boolean[]{mo, tu, we, th, fr, sa, su};
+    }
+
+
+    public String getTimeStr() {
 
         SimpleDateFormat ft;
 
-        if(true){
-            ft = new SimpleDateFormat ("hh:mm:ss a");
-        }
-        else{
-            ft = new SimpleDateFormat ("kk:mm:ss");
+        if (true) {
+            ft = new SimpleDateFormat("hh:mm:ss a");
+        } else {
+            ft = new SimpleDateFormat("kk:mm:ss");
         }
 
         String str = ft.format(start);
         str += " - ";
-        str+= ft.format(end);
+        str += ft.format(end);
         return str;
     }
 
-    public static String[] getIntervalStringArray(){
+    public static String[] getIntervalStringArray() {
         return new String[]{
                 "1 " + App.getAppResources().getString(R.string.minute),
                 "2 " + App.getAppResources().getString(R.string.minutes),
@@ -230,7 +232,7 @@ public class TimeInstance {
     }
 
 
-    public void setIntervalByIntevalNumber(EnumInterval enumInterval){
+    public void setIntervalByIntevalNumber(EnumInterval enumInterval) {
         switch (enumInterval) {
             case ONEMINUTE:
                 this.interval = 60;
@@ -269,8 +271,71 @@ public class TimeInstance {
                 this.interval = 60 * 60 * 12;
                 break;
         }
-
     }
+
+    public EnumInterval getEnumIntervalFromInterval() {
+        switch (interval) {
+            case 60:
+                return EnumInterval.intToEnumInterval(0);
+            case 60 * 2:
+                return EnumInterval.intToEnumInterval(1);
+            case 60 * 5:
+                return EnumInterval.intToEnumInterval(2);
+            case 60 * 10:
+                return EnumInterval.intToEnumInterval(3);
+            case 60 * 15:
+                return EnumInterval.intToEnumInterval(4);
+            case 60 * 30:
+                return EnumInterval.intToEnumInterval(5);
+            case 60 * 60:
+                return EnumInterval.intToEnumInterval(6);
+            case 60 * 60 * 2:
+                return EnumInterval.intToEnumInterval(7);
+            case 60 * 60 * 3:
+                return EnumInterval.intToEnumInterval(8);
+            case 60 * 60 * 4:
+                return EnumInterval.intToEnumInterval(9);
+            case 60 * 60 * 6:
+                return EnumInterval.intToEnumInterval(10);
+            case 60 * 60 * 12:
+                return EnumInterval.intToEnumInterval(11);
+            default:
+                return EnumInterval.intToEnumInterval(0);
+        }
+    }
+
+    public int getIntfromEnum(){
+        switch (interval) {
+            case 60:
+                return 0;
+            case 60 * 2:
+                return 1;
+            case 60 * 5:
+                return 2;
+            case 60 * 10:
+                return 3;
+            case 60 * 15:
+                return 4;
+            case 60 * 30:
+                return 5;
+            case 60 * 60:
+                return 6;
+            case 60 * 60 * 2:
+                return 7;
+            case 60 * 60 * 3:
+                return 8;
+            case 60 * 60 * 4:
+                return 9;
+            case 60 * 60 * 6:
+                return 10;
+            case 60 * 60 * 12:
+                return 11;
+            default:
+                return 0;
+        }
+    }
+
+
     //Room
     public TimeInstance(boolean on, String name, Date start, Date end, int interval, boolean mo, boolean tu, boolean we, boolean th, boolean fr, boolean sa, boolean su) {
         this.on = on;
@@ -288,7 +353,7 @@ public class TimeInstance {
     }
 
     //Fragments
-    public TimeInstance(boolean on, String name, Date start, Date end, boolean mo, boolean tu, boolean we, boolean th, boolean fr, boolean sa, boolean su,EnumInterval enumInterval) {
+    public TimeInstance(boolean on, String name, Date start, Date end, boolean mo, boolean tu, boolean we, boolean th, boolean fr, boolean sa, boolean su, EnumInterval enumInterval) {
         this.on = on;
         this.name = name;
         this.start = start;
