@@ -11,6 +11,8 @@ import java.util.Date;
 @TypeConverters(DateConverter.class)
 public class TimeInstance {
 
+
+
     @PrimaryKey(autoGenerate = true)
     private int id;
 
@@ -18,6 +20,7 @@ public class TimeInstance {
     private String name;
     private Date start;
     private Date end;
+    private int interval;
 
     private boolean mo;
     private boolean tu;
@@ -26,6 +29,51 @@ public class TimeInstance {
     private boolean fr;
     private boolean sa;
     private boolean su;
+
+    public enum EnumInterval{
+        ONEMINUTE,
+        TWOMINUTES,
+        FIVEMINUTES,
+        TENMINUTES,
+        QUARTERHOUR,
+        HALFHOUR,
+        ONEHOUR,
+        TWOHOURS,
+        THREEHOURS,
+        FOURHOURS,
+        SIXHOURS,
+        TWELVEHOURS;
+
+    public static EnumInterval intToEnumInterval(int x){
+            switch (x) {
+                case 0:
+                    return ONEMINUTE;
+                case 1:
+                    return TWOMINUTES;
+                case 2:
+                    return FIVEMINUTES;
+                case 3:
+                    return TENMINUTES;
+                case 4:
+                    return QUARTERHOUR;
+                case 5:
+                    return HALFHOUR;
+                case 6:
+                     return ONEHOUR;
+                case 7:
+                    return TWOHOURS;
+                case 8:
+                    return THREEHOURS;
+                case 9:
+                    return FOURHOURS;
+                case 10:
+                    return SIXHOURS;
+                case 11:
+                    return TWELVEHOURS;
+            }
+            return null;
+        }
+    }
 
     private boolean isInWeekdays(){
         if(!mo){
@@ -164,7 +212,83 @@ public class TimeInstance {
         return str;
     }
 
-    public TimeInstance(boolean on, String name, Date start, Date end, boolean mo, boolean tu, boolean we, boolean th, boolean fr, boolean sa, boolean su) {
+    public static String[] getIntervalStringArray(){
+        return new String[]{
+                "1 " + App.getAppResources().getString(R.string.minute),
+                "2 " + App.getAppResources().getString(R.string.minutes),
+                "5 " + App.getAppResources().getString(R.string.minutes),
+                "10 " + App.getAppResources().getString(R.string.minutes),
+                "15 " + App.getAppResources().getString(R.string.minutes),
+                "30 " + App.getAppResources().getString(R.string.minutes),
+                "1 " + App.getAppResources().getString(R.string.hour),
+                "2 " + App.getAppResources().getString(R.string.hours),
+                "3 " + App.getAppResources().getString(R.string.hours),
+                "4 " + App.getAppResources().getString(R.string.hours),
+                "6 " + App.getAppResources().getString(R.string.hours),
+                "12 " + App.getAppResources().getString(R.string.hours)
+        };
+    }
+
+
+    public void setIntervalByIntevalNumber(EnumInterval enumInterval){
+        switch (enumInterval) {
+            case ONEMINUTE:
+                this.interval = 60;
+                break;
+            case TWOMINUTES:
+                this.interval = 60 * 2;
+                break;
+            case FIVEMINUTES:
+                this.interval = 60 * 5;
+                break;
+            case TENMINUTES:
+                this.interval = 60 * 10;
+                break;
+            case QUARTERHOUR:
+                this.interval = 60 * 15;
+                break;
+            case HALFHOUR:
+                this.interval = 60 * 30;
+                break;
+            case ONEHOUR:
+                this.interval = 60 * 60;
+                break;
+            case TWOHOURS:
+                this.interval = 60 * 60 * 2;
+                break;
+            case THREEHOURS:
+                this.interval = 60 * 60 * 3;
+                break;
+            case FOURHOURS:
+                this.interval = 60 * 60 * 4;
+                break;
+            case SIXHOURS:
+                this.interval = 60 * 60 * 6;
+                break;
+            case TWELVEHOURS:
+                this.interval = 60 * 60 * 12;
+                break;
+        }
+
+    }
+    //Room
+    public TimeInstance(boolean on, String name, Date start, Date end, int interval, boolean mo, boolean tu, boolean we, boolean th, boolean fr, boolean sa, boolean su) {
+        this.on = on;
+        this.name = name;
+        this.start = start;
+        this.end = end;
+        this.interval = interval;
+        this.mo = mo;
+        this.tu = tu;
+        this.we = we;
+        this.th = th;
+        this.fr = fr;
+        this.sa = sa;
+        this.su = su;
+    }
+
+    //Fragments
+    public TimeInstance(boolean on, String name, Date start, Date end, boolean mo, boolean tu, boolean we, boolean th, boolean fr, boolean sa, boolean su,EnumInterval enumInterval) {
         this.on = on;
         this.name = name;
         this.start = start;
@@ -176,6 +300,7 @@ public class TimeInstance {
         this.fr = fr;
         this.sa = sa;
         this.su = su;
+        setIntervalByIntevalNumber(enumInterval);
     }
 
     public int getId() {
@@ -216,6 +341,14 @@ public class TimeInstance {
 
     public void setEnd(Date end) {
         this.end = end;
+    }
+
+    public int getInterval() {
+        return interval;
+    }
+
+    public void setInterval(int interval) {
+        this.interval = interval;
     }
 
     public boolean isMo() {
