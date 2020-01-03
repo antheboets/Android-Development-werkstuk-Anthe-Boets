@@ -413,6 +413,19 @@ public class TimeInstance {
         setIntervalByIntevalNumber(enumInterval);
     }
 
+    public TimeInstance(boolean[] arr){
+        if(arr != null){
+            this.mo = arr[0];
+            this.tu = arr[1];
+            this.we = arr[2];
+            this.th = arr[3];
+            this.fr = arr[4];
+            this.sa = arr[5];
+            this.su = arr[6];
+        }
+    }
+
+
     public int getId() {
         return id;
     }
