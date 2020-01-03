@@ -147,6 +147,51 @@ public class TimeInstance {
         }
         return str.equals("");
     }
+    //for test
+    public String getDaysStrWithStr() {
+
+        String str = "";
+        boolean firstItem = true;
+
+        if (everyDay()) {
+            return "every day";
+        }
+
+        if (isInWeekdays()) {
+            str += "weekdays";
+            firstItem = false;
+        } else {
+
+            str += getDayStr(firstItem, "mo", mo);
+            firstItem = isFirstTime(firstItem, str);
+            str += getDayStr(firstItem, "tu", tu);
+            firstItem = isFirstTime(firstItem, str);
+            str += getDayStr(firstItem, "we", we);
+            firstItem = isFirstTime(firstItem, str);
+            str += getDayStr(firstItem, "th", th);
+            firstItem = isFirstTime(firstItem, str);
+            str += getDayStr(firstItem, "fr", fr);
+            firstItem = isFirstTime(firstItem, str);
+        }
+        if (weekends()) {
+            if (firstItem) {
+                str += "weekends";
+                firstItem = false;
+            } else {
+                str = "weekends" + ", " + str;
+            }
+        } else {
+            str += getDayStr(firstItem, "sa", sa);
+            firstItem = isFirstTime(firstItem, str);
+            str += getDayStr(firstItem, "su", su);
+            firstItem = isFirstTime(firstItem, str);
+        }
+
+        if (str.equals("")) {
+            str = "nver";
+        }
+        return str;
+    }
 
     public String getDaysStr() {
 
