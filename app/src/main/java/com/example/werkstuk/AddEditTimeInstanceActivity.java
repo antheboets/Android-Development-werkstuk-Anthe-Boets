@@ -2,12 +2,15 @@ package com.example.werkstuk;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -15,7 +18,7 @@ import android.widget.Toast;
 
 import java.util.Date;
 
-public class AddEditTimeInstanceActivity extends AppCompatActivity {
+public class AddEditTimeInstanceActivity extends AppCompatActivity implements SetDaysFragment.SetDaysFragmentListener {
 
     public static final String EXTRA_ID = "com.example.werkstuk.EXTRA_ID";
     public static final String EXTRA_NAME = "com.example.werkstuk.EXTRA_NAME";
@@ -28,6 +31,8 @@ public class AddEditTimeInstanceActivity extends AppCompatActivity {
     private TimePicker timePickerStart;
     private TimePicker timePickerEnd;
     private NumberPicker numberPicker;
+    private Button daysButton;
+    private boolean[] daysArr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,15 @@ public class AddEditTimeInstanceActivity extends AppCompatActivity {
         timePickerStart = findViewById(R.id.edit_time_picker_start);
         timePickerEnd = findViewById(R.id.edit_time_picker_end);
         numberPicker = findViewById(R.id.edit_number_picker_time_interval);
+        daysButton = findViewById(R.id.edit_button_days);
+
+
+        daysButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFragment();
+            }
+        });
 
         timePickerStart.setIs24HourView(true);
         timePickerEnd.setIs24HourView(true);
@@ -53,10 +67,10 @@ public class AddEditTimeInstanceActivity extends AppCompatActivity {
         numberPicker.setMaxValue(values.length - 1);
         numberPicker.setDisplayedValues(values);
 
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white);
 
         Intent intent = getIntent();
-
+        daysArr = new boolean[]{false,false,false,false,false,false,false};
 
         if(intent.hasExtra(EXTRA_ID)){
             setTitle("Edit Item");
@@ -71,11 +85,24 @@ public class AddEditTimeInstanceActivity extends AppCompatActivity {
             timePickerEnd.setCurrentHour(end.getHours());
 
             numberPicker.setValue(intent.getIntExtra(EXTRA_TIMEINTERVAL,0));
-
+            boolean[] daysArrTemp = intent.getBooleanArrayExtra(EXTRA_DAYS);
+            if(daysArrTemp != null) {
+                daysArr = daysArrTemp;
+            }
+            TimeInstance timeInstanceTemp = new TimeInstance(daysArr);
+            daysButton.setText(timeInstanceTemp.getDaysStr());
         }
         else {
             setTitle("Add Item");
         }
+    }
+
+    public void openFragment(){
+        daysButton.setOnClickListener(null);
+        SetDaysFragment fragment = SetDaysFragment.newInstance(daysArr);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.add(R.id.edit_frame_layout, fragment, "SET_DAYS_FRAGMENT").commit();
     }
 
 
@@ -109,7 +136,6 @@ public class AddEditTimeInstanceActivity extends AppCompatActivity {
         end.setHours(timePickerEnd.getCurrentHour());
         end.setMinutes(timePickerEnd.getCurrentMinute());
         int enumInterval = numberPicker.getValue();
-        boolean[] days = new boolean[]{true, true, true, true, true, true, true};
 
         if (start.getTime() >= end.getTime()) {
             Toast.makeText(this, R.string.add_edit_start_end_error, Toast.LENGTH_SHORT).show();
@@ -119,11 +145,6 @@ public class AddEditTimeInstanceActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.add_edit_name_error, Toast.LENGTH_SHORT).show();
             return;
         }
-        /*
-        if(){
-            Toast.makeText(this, "Please insert a title and description", Toast.LENGTH_SHORT).show();
-        }
-        */
 
         Intent data = new Intent();
         int id = getIntent().getIntExtra(EXTRA_ID,-1);
@@ -135,11 +156,31 @@ public class AddEditTimeInstanceActivity extends AppCompatActivity {
         data.putExtra(EXTRA_NAME, name);
         data.putExtra(EXTRA_START, start.getTime());
         data.putExtra(EXTRA_END, end.getTime());
-        data.putExtra(EXTRA_DAYS, days);
+        data.putExtra(EXTRA_DAYS, daysArr);
         data.putExtra(EXTRA_TIMEINTERVAL, enumInterval);
 
         setResult(RESULT_OK, data);
         finish();
     }
 
+    @Override
+    public void updateActivity(boolean[] daysArr) {
+        TimeInstance timeInstanceTemp = new TimeInstance(daysArr);
+        daysButton.setText(timeInstanceTemp.getDaysStr());
+        this.daysArr = daysArr;
+    }
+
+    @Override
+    public void onFragmentInteraction(boolean[] daysArr) {
+        TimeInstance timeInstanceTemp = new TimeInstance(daysArr);
+        daysButton.setText(timeInstanceTemp.getDaysStr());
+        this.daysArr = daysArr;
+        onBackPressed();
+        daysButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFragment();
+            }
+        });
+    }
 }
