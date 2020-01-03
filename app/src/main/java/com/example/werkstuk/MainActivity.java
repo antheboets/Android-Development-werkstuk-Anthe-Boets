@@ -26,10 +26,12 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int ADD_TIME_INSTANCE_REQUEST = 1;
     public static final int EDIT_TIME_INSTANCE_REQUEST = 2;
+    public static final int SETTINS_REQUEST = 2;
 
     private FloatingActionButton floatingActionButton;
     private TimeInstanceViewModel timeInstanceViewModel;
     private RecyclerView recyclerView;
+    private TimeInstaceAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        final TimeInstaceAdapter adapter = new TimeInstaceAdapter();
+        adapter = new TimeInstaceAdapter();
         recyclerView.setAdapter(adapter);
 
 
@@ -104,15 +106,7 @@ public class MainActivity extends AppCompatActivity {
         */
 
     }
-    /*
-    public void openAddFragment(){
-        AddTimeInstaceFragment fragment = AddTimeInstaceFragment.newInstance();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.addToBackStack(null);
-        transaction.add(R.id.mainActivityFragment, fragment, "BLANK_FRAGMENT").commit();
-    }
-    */
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -147,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
             timeInstance.setId(id);
             timeInstanceViewModel.update(timeInstance);
             Toast.makeText(this, getString(R.string.main_update_toast), Toast.LENGTH_SHORT).show();
+        }
+        else if(requestCode == SETTINS_REQUEST && resultCode == RESULT_OK){
+            adapter.resetListView();
         }
     }
 
