@@ -58,6 +58,11 @@ public class TimeInstaceAdapter extends RecyclerView.Adapter<TimeInstaceAdapter.
         notifyDataSetChanged();
     }
 
+    public void resetListView(){
+
+        notifyDataSetChanged();
+    }
+
     public TimeInstance getTimeInstanceAt(int pos){
         return timeInstanceList.get(pos);
     }
