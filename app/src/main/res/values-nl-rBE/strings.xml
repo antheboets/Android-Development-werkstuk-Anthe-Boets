@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sprekende klok</string>
+    <string name="add_edit_name_error">Voer een naam in</string>
+    <string name="add_edit_start_end_error">Einde kan tijd niet beginnen vóór starttijd</string>
+    <string name="created">Aangemaakt</string>
+    <string name="hour">uur</string>
+    <string name="fridayShort">vr</string>
+    <string name="fridayLarge">Vrijdag</string>
+    <string name="every_day">elke dag</string>
+    <string name="end">Einde</string>
+    <string name="delete_all_items">Verwijder elke item</string>
+    <string name="days">Dagen</string>
+    <string name="hours">uren</string>
+    <string name="itemDelete">Item verwijdert</string>
+    <string name="main_cant_update_error_toast">Item kan niet vernieuwd worden</string>
+    <string name="main_delete_all_toast">Alle items</string>
+    <string name="main_update_toast">Item vernieuwd</string>
+    <string name="minute">minuut</string>
+    <string name="minutes">minuten</string>
+    <string name="mondayLarge">Maandag</string>
+    <string name="mondayShort">ma</string>
+    <string name="name">Naam</string>
+    <string name="never">nooit</string>
+    <string name="on">aan</string>
+    <string name="saturdayLarge">Zaterdag</string>
+    <string name="saturdayShort">za</string>
+    <string name="save">Opgeslagen</string>
+    <string name="settings">Instellingen</string>
+    <string name="start">Start</string>
+    <string name="sundayLarge">Zondag</string>
+    <string name="sundayShort">zo</string>
+    <string name="thursdayLarge">Donderdag</string>
+    <string name="thursdayShort">do</string>
+    <string name="time">tijd</string>
+    <string name="time_interval">TijdsInterval</string>
+    <string name="tuesdayLarge">Dinsdag</string>
+    <string name="tuesdayShort">di</string>
+    <string name="wednesdayLarge">Woensdag</string>
+    <string name="wednesdayShort">wo</string>
+    <string name="weekdays">weekdagen</string>
+    <string name="weekends">weekends</string>
+</resources>
