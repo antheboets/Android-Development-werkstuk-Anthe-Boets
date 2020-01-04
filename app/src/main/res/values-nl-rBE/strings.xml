@@ -42,4 +42,9 @@
     <string name="weekends">weekends</string>
     <string name="Additem">Item toevoegen</string>
     <string name="Edititem">Item aanpassen</string>
+    <string name="_24_hour_days">24 uur dagen</string>
+    <string name="speech_language">Spraak taal</string>
+    <string name="english">Engels</string>
+    <string name="dutch">Nederlands</string>
+    <string name="settingsSaved">Instellingen opgeslagen</string>
 </resources>
