@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,11 +24,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.Date;
 import java.util.List;
 
+import static com.example.werkstuk.OptionActivity.LANGUAGE_ID;
+import static com.example.werkstuk.OptionActivity.SHARED_PREFERENCES_NAME;
+import static com.example.werkstuk.OptionActivity._24HOURS_DAY;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final int ADD_TIME_INSTANCE_REQUEST = 1;
     public static final int EDIT_TIME_INSTANCE_REQUEST = 2;
-    public static final int SETTINS_REQUEST = 2;
+    public static final int SETTINS_REQUEST = 3;
 
     private FloatingActionButton floatingActionButton;
     private TimeInstanceViewModel timeInstanceViewModel;
@@ -42,9 +48,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        adapter = new TimeInstaceAdapter();
+        adapter = new TimeInstaceAdapter(getPreferences(Context.MODE_PRIVATE).getBoolean(_24HOURS_DAY,true));
         recyclerView.setAdapter(adapter);
-
 
         timeInstanceViewModel = ViewModelProviders.of(this).get(TimeInstanceViewModel.class);
         timeInstanceViewModel.getAllTimeInstances().observe(this, new Observer<List<TimeInstance>>() {
@@ -98,8 +103,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSwitchChange(TimeInstance timeInstance) {
                 timeInstanceViewModel.update(timeInstance);
+
             }
         });
+
         /*
         timeInstanceListFragment = new TimeInstanceListFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.mainActivityFragment, timeInstanceListFragment).commit();
@@ -143,7 +150,10 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, getString(R.string.main_update_toast), Toast.LENGTH_SHORT).show();
         }
         else if(requestCode == SETTINS_REQUEST && resultCode == RESULT_OK){
+            SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFERENCES_NAME,MODE_PRIVATE);
+            adapter.set24HoursDay(sharedPref.getBoolean(_24HOURS_DAY, true));
             adapter.resetListView();
+            Toast.makeText(this, getString(R.string.settingsSaved), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -162,9 +172,21 @@ public class MainActivity extends AppCompatActivity {
                 timeInstanceViewModel.deleteAll();
                 Toast.makeText(this, getString(R.string.main_delete_all_toast), Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.main_activity_menu_item_settings:
+                Intent intent = new Intent(MainActivity.this, OptionActivity.class);
+                startActivityForResult(intent, SETTINS_REQUEST);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+    public void addRemoveAlarm(TimeInstance timeInstance){
+        if(timeInstance.isOn()){
+            Intent intent = new Intent();
+        }
+        else{
+
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.werkstuk;
 
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.werkstuk.OptionActivity._24HOURS_DAY;
+
+
 public class TimeInstaceAdapter extends RecyclerView.Adapter<TimeInstaceAdapter.TimeInstanceHolder> {
     private List<TimeInstance> timeInstanceList = new ArrayList<TimeInstance>();
     private OnClickListener itemClickListener;
     private OnSwitchChangeListener switchChangeListener;
-
+    private boolean _24hoursDays;
 
     @NonNull
     @Override
@@ -30,7 +34,7 @@ public class TimeInstaceAdapter extends RecyclerView.Adapter<TimeInstaceAdapter.
         TimeInstance currentTimeInstance = timeInstanceList.get(position);
         holder.nameTextView.setText(currentTimeInstance.getName());
         holder.daysTextView.setText(currentTimeInstance.getDaysStr());
-        holder.timeTextView.setText(currentTimeInstance.getTimeStr());
+        holder.timeTextView.setText(currentTimeInstance.getTimeStr(_24hoursDays));
         holder.onSwitch.setOnCheckedChangeListener(null);
         holder.onSwitch.setChecked(currentTimeInstance.isOn());
         final int pos = position;
@@ -45,6 +49,14 @@ public class TimeInstaceAdapter extends RecyclerView.Adapter<TimeInstaceAdapter.
 
             }
         });
+    }
+
+    public void set24HoursDay(boolean _24hoursDays){
+        this._24hoursDays = _24hoursDays;
+    }
+
+    public TimeInstaceAdapter(boolean _24hoursDays) {
+        this._24hoursDays = _24hoursDays;
     }
 
     @Override

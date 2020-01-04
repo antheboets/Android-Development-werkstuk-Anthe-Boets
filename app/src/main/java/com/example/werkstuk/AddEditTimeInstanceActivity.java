@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +18,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Date;
+
+import static com.example.werkstuk.OptionActivity.SHARED_PREFERENCES_NAME;
+import static com.example.werkstuk.OptionActivity._24HOURS_DAY;
 
 public class AddEditTimeInstanceActivity extends AppCompatActivity implements SetDaysFragment.SetDaysFragmentListener {
 
@@ -53,8 +57,11 @@ public class AddEditTimeInstanceActivity extends AppCompatActivity implements Se
             }
         });
 
-        timePickerStart.setIs24HourView(true);
-        timePickerEnd.setIs24HourView(true);
+        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFERENCES_NAME,MODE_PRIVATE);
+         boolean _24HourDays = sharedPref.getBoolean(_24HOURS_DAY, true);
+
+        timePickerStart.setIs24HourView(_24HourDays);
+        timePickerEnd.setIs24HourView(_24HourDays);
 
         timePickerStart.setCurrentHour(0);
         timePickerStart.setCurrentMinute(0);
@@ -73,7 +80,7 @@ public class AddEditTimeInstanceActivity extends AppCompatActivity implements Se
         daysArr = new boolean[]{false,false,false,false,false,false,false};
 
         if(intent.hasExtra(EXTRA_ID)){
-            setTitle("Edit Item");
+            setTitle(getString(R.string.Edititem));
             textViewName.setText(intent.getStringExtra(EXTRA_NAME));
             Date start = new Date(intent.getLongExtra(EXTRA_START,0));
             Date end = new Date(intent.getLongExtra(EXTRA_END,0));
@@ -93,7 +100,7 @@ public class AddEditTimeInstanceActivity extends AppCompatActivity implements Se
             daysButton.setText(timeInstanceTemp.getDaysStr());
         }
         else {
-            setTitle("Add Item");
+            setTitle(getString(R.string.Additem));
         }
     }
 
