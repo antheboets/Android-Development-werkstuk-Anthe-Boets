@@ -40,4 +40,6 @@
     <string name="wednesdayShort">wo</string>
     <string name="weekdays">weekdagen</string>
     <string name="weekends">weekends</string>
+    <string name="Additem">Item toevoegen</string>
+    <string name="Edititem">Item aanpassen</string>
 </resources>

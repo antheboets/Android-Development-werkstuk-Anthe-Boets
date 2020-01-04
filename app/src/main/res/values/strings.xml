@@ -39,4 +39,6 @@
     <string name="main_update_toast">Item updated</string>
     <string name="main_cant_update_error_toast">Item can not be updated</string>
     <string name="main_delete_all_toast">All items deleted</string>
+    <string name="Edititem">Edit item</string>
+    <string name="Additem">Add item</string>
 </resources>
