@@ -11,7 +11,7 @@ import java.util.Date;
 @TypeConverters(DateConverter.class)
 public class TimeInstance {
 
-
+    final private static long dayInMilliseconds = 86400000;
     @PrimaryKey(autoGenerate = true)
     private int id;
 
@@ -188,9 +188,19 @@ public class TimeInstance {
         }
 
         if (str.equals("")) {
-            str = "nver";
+            str = "never";
         }
         return str;
+    }
+
+    public long calMiniSecForNextAlarm(){
+        Date currentDate = new Date(0);
+        currentDate.setMinutes(new Date().getMinutes());
+        currentDate.setHours(new Date().getHours());
+        if((currentDate.getTime() + interval) >=  end.getTime()){
+            return dayInMilliseconds  - currentDate.getTime() +  start.getTime();
+        }
+        return interval;
     }
 
     public String getDaysStr() {
