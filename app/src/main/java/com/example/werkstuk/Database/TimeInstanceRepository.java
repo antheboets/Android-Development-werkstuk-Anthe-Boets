@@ -41,6 +41,19 @@ public class TimeInstanceRepository {
         return timeInstancesList;
     }
 
+    public TimeInstance getById(int id){
+
+        List<TimeInstance> list = timeInstancesList.getValue();
+        if(list == null){
+            return null;
+        }
+        for (TimeInstance item: list) {
+            if(item.getId() == id){
+                return item;
+            }
+        }
+        return null;
+    }
 
     private static class InserTimeInstaceAsync extends AsyncTask<TimeInstance, Void, Void>{
 
