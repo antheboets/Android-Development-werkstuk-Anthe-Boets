@@ -253,14 +253,14 @@ public class TimeInstance {
     }
 
 
-    public String getTimeStr() {
+    public String getTimeStr(boolean is24Hours) {
 
         SimpleDateFormat ft;
 
-        if (true) {
-            ft = new SimpleDateFormat("hh:mm:ss a");
-        } else {
+        if (is24Hours) {
             ft = new SimpleDateFormat("kk:mm:ss");
+        } else {
+            ft = new SimpleDateFormat("KK:mm:ss a");
         }
 
         String str = ft.format(start);
