@@ -194,16 +194,17 @@ public class TimeInstance {
     }
 
     public long calMiniSecForNextAlarm(){
-        Date currentDate = new Date(0);
-        currentDate.setMinutes(new Date().getMinutes());
-        currentDate.setHours(new Date().getHours());
-        if(currentDate.getTime() >= start.getTime() && currentDate.getTime() < end.getTime()){
-            return 0;
+        Date currentDate = new Date();
+        Date currentDayMili = new Date(0);
+        currentDayMili.setMinutes(new Date().getMinutes());
+        currentDayMili.setHours(new Date().getHours());
+        if(currentDayMili.getTime() >= start.getTime() && currentDayMili.getTime() < end.getTime()){
+            return currentDate.getTime() + 1000;
         }
-        if((currentDate.getTime() + interval) >=  end.getTime()){
-            return (dayInMilliseconds * getNextDay()) + (dayInMilliseconds  - currentDate.getTime()) +  start.getTime();
+        if((currentDayMili.getTime() + interval) >=  end.getTime()){
+            return (dayInMilliseconds * getNextDay()) + (dayInMilliseconds  - currentDate.getTime()) +  start.getTime() + currentDate.getTime();
         }
-        return interval;
+        return currentDate.getTime() + interval;
     }
 
     public boolean hasADay(){
@@ -340,69 +341,69 @@ public class TimeInstance {
     public void setIntervalByIntevalNumber(EnumInterval enumInterval) {
         switch (enumInterval) {
             case ONEMINUTE:
-                this.interval = 60;
+                this.interval = 1000 * 60;
                 break;
             case TWOMINUTES:
-                this.interval = 60 * 2;
+                this.interval = 1000 * 60 * 2;
                 break;
             case FIVEMINUTES:
-                this.interval = 60 * 5;
+                this.interval = 1000 * 60 * 5;
                 break;
             case TENMINUTES:
-                this.interval = 60 * 10;
+                this.interval = 1000 * 60 * 10;
                 break;
             case QUARTERHOUR:
-                this.interval = 60 * 15;
+                this.interval = 1000 * 60 * 15;
                 break;
             case HALFHOUR:
-                this.interval = 60 * 30;
+                this.interval = 1000 * 60 * 30;
                 break;
             case ONEHOUR:
-                this.interval = 60 * 60;
+                this.interval = 1000 * 60 * 60;
                 break;
             case TWOHOURS:
-                this.interval = 60 * 60 * 2;
+                this.interval = 1000 * 60 * 60 * 2;
                 break;
             case THREEHOURS:
-                this.interval = 60 * 60 * 3;
+                this.interval = 1000 * 60 * 60 * 3;
                 break;
             case FOURHOURS:
-                this.interval = 60 * 60 * 4;
+                this.interval = 1000 * 60 * 60 * 4;
                 break;
             case SIXHOURS:
-                this.interval = 60 * 60 * 6;
+                this.interval = 1000 * 60 * 60 * 6;
                 break;
             case TWELVEHOURS:
-                this.interval = 60 * 60 * 12;
+                this.interval = 1000 * 60 * 60 * 12;
                 break;
         }
     }
 
     public EnumInterval getEnumIntervalFromInterval() {
         switch (interval) {
-            case 60:
+            case 1000 * 60:
                 return EnumInterval.intToEnumInterval(0);
-            case 60 * 2:
+            case 1000 * 60 * 2:
                 return EnumInterval.intToEnumInterval(1);
-            case 60 * 5:
+            case 1000 * 60 * 5:
                 return EnumInterval.intToEnumInterval(2);
-            case 60 * 10:
+            case 1000 * 60 * 10:
                 return EnumInterval.intToEnumInterval(3);
-            case 60 * 15:
+            case 1000 * 60 * 15:
                 return EnumInterval.intToEnumInterval(4);
-            case 60 * 30:
+            case 1000 * 60 * 30:
                 return EnumInterval.intToEnumInterval(5);
-            case 60 * 60:
+            case 1000 * 60 * 60:
                 return EnumInterval.intToEnumInterval(6);
-            case 60 * 60 * 2:
+            case 1000 * 60 * 60 * 2:
                 return EnumInterval.intToEnumInterval(7);
-            case 60 * 60 * 3:
+            case 1000 * 60 * 60 * 3:
                 return EnumInterval.intToEnumInterval(8);
-            case 60 * 60 * 4:
+            case 1000 * 60 * 60 * 4:
                 return EnumInterval.intToEnumInterval(9);
-            case 60 * 60 * 6:
+            case 1000 * 60 * 60 * 6:
                 return EnumInterval.intToEnumInterval(10);
-            case 60 * 60 * 12:
+            case 1000 * 60 * 60 * 12:
                 return EnumInterval.intToEnumInterval(11);
             default:
                 return EnumInterval.intToEnumInterval(0);
@@ -411,29 +412,29 @@ public class TimeInstance {
 
     public int getIntfromEnum(){
         switch (interval) {
-            case 60:
+            case 1000 * 60:
                 return 0;
-            case 60 * 2:
+            case 1000 * 60 * 2:
                 return 1;
-            case 60 * 5:
+            case 1000 * 60 * 5:
                 return 2;
-            case 60 * 10:
+            case 1000 * 60 * 10:
                 return 3;
-            case 60 * 15:
+            case 1000 * 60 * 15:
                 return 4;
-            case 60 * 30:
+            case 1000 * 60 * 30:
                 return 5;
-            case 60 * 60:
+            case 1000 * 60 * 60:
                 return 6;
-            case 60 * 60 * 2:
+            case 1000 * 60 * 60 * 2:
                 return 7;
-            case 60 * 60 * 3:
+            case 1000 * 60 * 60 * 3:
                 return 8;
-            case 60 * 60 * 4:
+            case 1000 * 60 * 60 * 4:
                 return 9;
-            case 60 * 60 * 6:
+            case 1000 * 60 * 60 * 6:
                 return 10;
-            case 60 * 60 * 12:
+            case 1000 * 60 * 60 * 12:
                 return 11;
             default:
                 return 0;
