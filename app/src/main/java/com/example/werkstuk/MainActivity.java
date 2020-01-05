@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmManager.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, timeInstance.getId(), intent, 0);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, 1, pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, timeInstance.calMiniSecForNextAlarm(), pendingIntent);
         long e =  timeInstance.calMiniSecForNextAlarm();
     }
     public void removeAlarm(TimeInstance timeInstance){
