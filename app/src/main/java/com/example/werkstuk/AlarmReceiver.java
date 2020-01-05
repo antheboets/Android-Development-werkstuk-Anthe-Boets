@@ -2,13 +2,20 @@ package com.example.werkstuk;
 
 import android.app.AlarmManager;
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.example.werkstuk.Database.TimeInstanceRepository;
 
@@ -76,7 +83,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 mTTS.speak(strToSpeak, TextToSpeech.QUEUE_FLUSH, null);
 
                 AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                if (timeInstance.isOn()) {
+                if (timeInstance.isOn() && timeInstance.hasADay()) {
                     Intent alarmIntent = new Intent(context, AlarmReceiver.class);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, timeInstance.getId(), alarmIntent, 0);
                     alarmManager.set(AlarmManager.RTC_WAKEUP, timeInstance.calMiniSecForNextAlarm(), pendingIntent);
