@@ -25,7 +25,7 @@ public class BootCompletedBroadcastReceiver extends BroadcastReceiver {
             if(timeInstanceList != null){
                 AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
                 for (TimeInstance item: timeInstanceList) {
-                    if(item.isOn()){
+                    if(item.isOn()&& item.hasADay()){
                         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, item.getId(), alarmIntent,0);
                         alarmManager.set(AlarmManager.RTC_WAKEUP, item.calMiniSecForNextAlarm(),pendingIntent);

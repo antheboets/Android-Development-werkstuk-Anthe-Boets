@@ -197,10 +197,61 @@ public class TimeInstance {
         Date currentDate = new Date(0);
         currentDate.setMinutes(new Date().getMinutes());
         currentDate.setHours(new Date().getHours());
+        if(currentDate.getTime() >= start.getTime() && currentDate.getTime() < end.getTime()){
+            return 0;
+        }
         if((currentDate.getTime() + interval) >=  end.getTime()){
-            return dayInMilliseconds  - currentDate.getTime() +  start.getTime();
+            return (dayInMilliseconds * getNextDay()) + (dayInMilliseconds  - currentDate.getTime()) +  start.getTime();
         }
         return interval;
+    }
+
+    public boolean hasADay(){
+        if(mo){
+            return true;
+        }
+        if(tu){
+            return true;
+        }
+        if(we){
+            return true;
+        }
+        if(th){
+            return true;
+        }
+        if(fr){
+            return true;
+        }
+        if(sa){
+            return true;
+        }
+        if(su){
+            return true;
+        }
+        return false;
+    }
+
+    private int getNextDay(){
+        if(!hasADay()){
+            return 0;
+        }
+        SimpleDateFormat ft;
+        ft = new SimpleDateFormat("u");
+        int dayNumber = Integer.parseInt(ft.format(new Date()));
+        boolean[] arr = getDaysArray();
+        for(int i = 0; i < arr.length; i++){
+            if(dayNumber + (i +1) > 7){
+                if(arr[dayNumber - 6 + i]){
+                    return i;
+                }
+            }
+            else{
+                if(arr[dayNumber + i]){
+                    return i;
+                }
+            }
+        }
+        return 0;
     }
 
     public String getDaysStr() {
@@ -251,7 +302,6 @@ public class TimeInstance {
     public boolean[] getDaysArray() {
         return new boolean[]{mo, tu, we, th, fr, sa, su};
     }
-
 
     public String getTimeStr(boolean is24Hours) {
 

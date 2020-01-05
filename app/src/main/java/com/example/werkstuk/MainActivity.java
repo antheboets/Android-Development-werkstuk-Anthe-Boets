@@ -9,10 +9,14 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,8 +25,11 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.sql.Time;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import static com.example.werkstuk.OptionActivity.LANGUAGE_ID;
 import static com.example.werkstuk.OptionActivity.SHARED_PREFERENCES_NAME;
@@ -38,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private TimeInstanceViewModel timeInstanceViewModel;
     private RecyclerView recyclerView;
     private TimeInstaceAdapter adapter;
+
+    private TextToSpeech mTTS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<TimeInstance> timeInstances) {
                 adapter.setTimeInstanceList(timeInstances);
+                resetAllAlarms(timeInstances);
             }
         });
 
@@ -80,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 timeInstanceViewModel.delete(adapter.getTimeInstanceAt(viewHolder.getAdapterPosition()));
+                deleteAlarm(adapter.getTimeInstanceAt(viewHolder.getAdapterPosition()));
             }
         }).attachToRecyclerView(recyclerView);
 
@@ -104,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSwitchChange(TimeInstance timeInstance) {
                 timeInstanceViewModel.update(timeInstance);
 
+
             }
         });
 
@@ -111,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
         timeInstanceListFragment = new TimeInstanceListFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.mainActivityFragment, timeInstanceListFragment).commit();
         */
-
     }
 
 
@@ -129,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
             boolean[] days = data.getBooleanArrayExtra(AddEditTimeInstanceActivity.EXTRA_DAYS);
             TimeInstance timeInstance = new TimeInstance(true, name, start, end, days[0], days[1], days[2], days[3], days[4], days[5], days[6], enumInterval);
             timeInstanceViewModel.insert(timeInstance);
+            //resetAllAlarms(timeInstanceViewModel.getAllTimeInstances().getValue());
             Toast.makeText(this, getString(R.string.created), Toast.LENGTH_SHORT).show();
         }
         else if(requestCode == EDIT_TIME_INSTANCE_REQUEST && resultCode == RESULT_OK){
@@ -147,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
             TimeInstance timeInstance = new TimeInstance(true, name, start, end, days[0], days[1], days[2], days[3], days[4], days[5], days[6], enumInterval);
             timeInstance.setId(id);
             timeInstanceViewModel.update(timeInstance);
+            //resetAlarm(timeInstance);
             Toast.makeText(this, getString(R.string.main_update_toast), Toast.LENGTH_SHORT).show();
         }
         else if(requestCode == SETTINS_REQUEST && resultCode == RESULT_OK){
@@ -170,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.main_activity_menu_delete_all_time_instances:
                 timeInstanceViewModel.deleteAll();
+                //deleteAllAlarms(timeInstanceViewModel.getAllTimeInstances().getValue());
                 Toast.makeText(this, getString(R.string.main_delete_all_toast), Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.main_activity_menu_item_settings:
@@ -181,12 +195,44 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    public void addRemoveAlarm(TimeInstance timeInstance){
-        if(timeInstance.isOn()){
-            Intent intent = new Intent();
-        }
-        else{
 
+    public void deleteAlarm(TimeInstance timeInstance){
+        if(timeInstance.isOn() && timeInstance.hasADay()){
+            removeAlarm(timeInstance);
         }
+    }
+    public void deleteAllAlarms(List<TimeInstance> list){
+        for(TimeInstance instance: list){
+            if(instance.isOn() && instance.hasADay()){
+                removeAlarm(instance);
+            }
+        }
+    }
+    public void resetAlarm(TimeInstance timeInstance){
+        if(timeInstance.isOn() && timeInstance.hasADay()){
+            removeAlarm(timeInstance);
+            setAlarm(timeInstance);
+        }
+    }
+    public void resetAllAlarms(List<TimeInstance> list){
+        for(TimeInstance instance: list){
+            if(instance.isOn() && instance.hasADay()){
+                removeAlarm(instance);
+                setAlarm(instance);
+            }
+        }
+    }
+    public void setAlarm(TimeInstance timeInstance){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmManager.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, timeInstance.getId(), intent, 0);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, 1, pendingIntent);
+        long e =  timeInstance.calMiniSecForNextAlarm();
+    }
+    public void removeAlarm(TimeInstance timeInstance){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmManager.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, timeInstance.getId(), intent, 0);
+        alarmManager.cancel(pendingIntent);
     }
 }

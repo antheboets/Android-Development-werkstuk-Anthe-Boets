@@ -19,7 +19,6 @@ public class TimeInstanceViewModel extends AndroidViewModel {
         super(application);
         repository = new TimeInstanceRepository(application);
         timeInstacneList = repository.getAllTimeInstances();
-
     }
 
     public void insert(TimeInstance timeInstance){
