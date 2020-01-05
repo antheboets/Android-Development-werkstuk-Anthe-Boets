@@ -46,4 +46,5 @@
     <string name="english">English</string>
     <string name="dutch">Dutch</string>
     <string name="settingsSaved">Settings saved</string>
+    <string name="alarm">alarm</string>
 </resources>
