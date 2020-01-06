@@ -31,6 +31,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import static com.example.werkstuk.AddEditTimeInstanceActivity.EXTRA_DAYS;
+import static com.example.werkstuk.AddEditTimeInstanceActivity.EXTRA_ID;
+import static com.example.werkstuk.AddEditTimeInstanceActivity.EXTRA_NAME;
+import static com.example.werkstuk.AddEditTimeInstanceActivity.EXTRA_START;
+import static com.example.werkstuk.AddEditTimeInstanceActivity.EXTRA_TIMEINTERVAL;
 import static com.example.werkstuk.OptionActivity.LANGUAGE_ID;
 import static com.example.werkstuk.OptionActivity.SHARED_PREFERENCES_NAME;
 import static com.example.werkstuk.OptionActivity._24HOURS_DAY;
@@ -40,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int ADD_TIME_INSTANCE_REQUEST = 1;
     public static final int EDIT_TIME_INSTANCE_REQUEST = 2;
     public static final int SETTINS_REQUEST = 3;
+
+    public static final String EXTRA_ON = "com.example.werkstuk.EXTRA_ON";
 
     private FloatingActionButton floatingActionButton;
     private TimeInstanceViewModel timeInstanceViewModel;
@@ -99,12 +106,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(TimeInstance timeInstance) {
                 Intent intent = new Intent(MainActivity.this, AddEditTimeInstanceActivity.class);
-                intent.putExtra(AddEditTimeInstanceActivity.EXTRA_ID, timeInstance.getId());
-                intent.putExtra(AddEditTimeInstanceActivity.EXTRA_NAME, timeInstance.getName());
-                intent.putExtra(AddEditTimeInstanceActivity.EXTRA_START, timeInstance.getStart().getTime());
+                intent.putExtra(EXTRA_ID, timeInstance.getId());
+                intent.putExtra(EXTRA_NAME, timeInstance.getName());
+                intent.putExtra(EXTRA_START, timeInstance.getStart().getTime());
                 intent.putExtra(AddEditTimeInstanceActivity.EXTRA_END, timeInstance.getEnd().getTime());
-                intent.putExtra(AddEditTimeInstanceActivity.EXTRA_DAYS, timeInstance.getDaysArray());
-                intent.putExtra(AddEditTimeInstanceActivity.EXTRA_TIMEINTERVAL, timeInstance.getIntfromEnum());
+                intent.putExtra(EXTRA_DAYS, timeInstance.getDaysArray());
+                intent.putExtra(EXTRA_TIMEINTERVAL, timeInstance.getIntfromEnum());
                 startActivityForResult(intent, EDIT_TIME_INSTANCE_REQUEST);
             }
         });
@@ -131,31 +138,31 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ADD_TIME_INSTANCE_REQUEST && resultCode == RESULT_OK) {
             String name = getString(R.string.name);
-            if (data.getStringExtra(AddEditTimeInstanceActivity.EXTRA_NAME) != null) {
-                name = data.getStringExtra(AddEditTimeInstanceActivity.EXTRA_NAME);
+            if (data.getStringExtra(EXTRA_NAME) != null) {
+                name = data.getStringExtra(EXTRA_NAME);
             }
-            Date start = new Date(data.getLongExtra(AddEditTimeInstanceActivity.EXTRA_START, 0));
+            Date start = new Date(data.getLongExtra(EXTRA_START, 0));
             Date end = new Date(data.getLongExtra(AddEditTimeInstanceActivity.EXTRA_END, 0));
-            TimeInstance.EnumInterval enumInterval = TimeInstance.EnumInterval.intToEnumInterval(data.getIntExtra(AddEditTimeInstanceActivity.EXTRA_TIMEINTERVAL, 0));
-            boolean[] days = data.getBooleanArrayExtra(AddEditTimeInstanceActivity.EXTRA_DAYS);
+            TimeInstance.EnumInterval enumInterval = TimeInstance.EnumInterval.intToEnumInterval(data.getIntExtra(EXTRA_TIMEINTERVAL, 0));
+            boolean[] days = data.getBooleanArrayExtra(EXTRA_DAYS);
             TimeInstance timeInstance = new TimeInstance(true, name, start, end, days[0], days[1], days[2], days[3], days[4], days[5], days[6], enumInterval);
             timeInstanceViewModel.insert(timeInstance);
             //resetAllAlarms(timeInstanceViewModel.getAllTimeInstances().getValue());
             Toast.makeText(this, getString(R.string.created), Toast.LENGTH_SHORT).show();
         }
         else if(requestCode == EDIT_TIME_INSTANCE_REQUEST && resultCode == RESULT_OK){
-            int id = data.getIntExtra(AddEditTimeInstanceActivity.EXTRA_ID, - 1);
+            int id = data.getIntExtra(EXTRA_ID, - 1);
             if(id == -1){
                 Toast.makeText(this, getString(R.string.main_cant_update_error_toast), Toast.LENGTH_SHORT).show();
             }
             String name = getString(R.string.name);
-            if (data.getStringExtra(AddEditTimeInstanceActivity.EXTRA_NAME) != null) {
-                name = data.getStringExtra(AddEditTimeInstanceActivity.EXTRA_NAME);
+            if (data.getStringExtra(EXTRA_NAME) != null) {
+                name = data.getStringExtra(EXTRA_NAME);
             }
-            Date start = new Date(data.getLongExtra(AddEditTimeInstanceActivity.EXTRA_START, 0));
+            Date start = new Date(data.getLongExtra(EXTRA_START, 0));
             Date end = new Date(data.getLongExtra(AddEditTimeInstanceActivity.EXTRA_END, 0));
-            TimeInstance.EnumInterval enumInterval = TimeInstance.EnumInterval.intToEnumInterval(data.getIntExtra(AddEditTimeInstanceActivity.EXTRA_TIMEINTERVAL, 0));
-            boolean[] days = data.getBooleanArrayExtra(AddEditTimeInstanceActivity.EXTRA_DAYS);
+            TimeInstance.EnumInterval enumInterval = TimeInstance.EnumInterval.intToEnumInterval(data.getIntExtra(EXTRA_TIMEINTERVAL, 0));
+            boolean[] days = data.getBooleanArrayExtra(EXTRA_DAYS);
             TimeInstance timeInstance = new TimeInstance(true, name, start, end, days[0], days[1], days[2], days[3], days[4], days[5], days[6], enumInterval);
             timeInstance.setId(id);
             timeInstanceViewModel.update(timeInstance);
@@ -224,14 +231,20 @@ public class MainActivity extends AppCompatActivity {
     }
     public void setAlarm(TimeInstance timeInstance){
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmManager.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, timeInstance.getId(), intent, 0);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putExtra(EXTRA_ID, timeInstance.getId());
+        intent.putExtra(EXTRA_NAME, timeInstance.getName());
+        intent.putExtra(EXTRA_START, timeInstance.getStart());
+        intent.putExtra(EXTRA_DAYS, timeInstance.getEnd());
+        intent.putExtra(EXTRA_DAYS, timeInstance.getDaysArray());
+        intent.putExtra(EXTRA_TIMEINTERVAL, timeInstance.getIntfromEnum());
+        intent.putExtra(EXTRA_ON, timeInstance.isOn());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         alarmManager.set(AlarmManager.RTC_WAKEUP, timeInstance.calMiniSecForNextAlarm(), pendingIntent);
-        long e =  timeInstance.calMiniSecForNextAlarm();
     }
     public void removeAlarm(TimeInstance timeInstance){
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmManager.class);
+        Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, timeInstance.getId(), intent, 0);
         alarmManager.cancel(pendingIntent);
     }
