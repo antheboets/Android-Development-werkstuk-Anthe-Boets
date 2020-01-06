@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
     public void removeAlarm(TimeInstance timeInstance){
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, timeInstance.getId(), intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         alarmManager.cancel(pendingIntent);
     }
 }
