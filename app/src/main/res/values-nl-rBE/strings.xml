@@ -48,4 +48,5 @@
     <string name="dutch">Nederlands</string>
     <string name="settingsSaved">Instellingen opgeslagen</string>
     <string name="alarm">alarm</string>
+    <string name="notification">Aankondiging</string>
 </resources>
