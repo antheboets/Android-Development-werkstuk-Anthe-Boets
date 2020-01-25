@@ -21,23 +21,23 @@ public class TimeInstanceViewModel extends AndroidViewModel {
         timeInstacneList = repository.getAllTimeInstances();
     }
 
-    public void insert(TimeInstance timeInstance){
+    public void insert(TimeInstance timeInstance) {
         repository.insert(timeInstance);
     }
 
-    public void update(TimeInstance timeInstance){
+    public void update(TimeInstance timeInstance) {
         repository.update(timeInstance);
     }
 
-    public void delete(TimeInstance timeInstance){
+    public void delete(TimeInstance timeInstance) {
         repository.delete(timeInstance);
     }
 
-    public void deleteAll(){
+    public void deleteAll() {
         repository.deleteAll();
     }
 
-    public LiveData<List<TimeInstance>> getAllTimeInstances(){
+    public LiveData<List<TimeInstance>> getAllTimeInstances() {
         return timeInstacneList;
     }
 

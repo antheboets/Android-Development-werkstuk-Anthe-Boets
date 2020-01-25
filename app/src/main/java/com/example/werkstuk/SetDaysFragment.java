@@ -23,8 +23,10 @@ public class SetDaysFragment extends Fragment {
 
     public interface SetDaysFragmentListener {
         void updateActivity(boolean[] daysArr);
+
         void onFragmentInteraction(boolean[] daysArr);
     }
+
     private SetDaysFragmentListener setDaysFragmentListener;
 
     private Switch moSwitch;
@@ -85,7 +87,7 @@ public class SetDaysFragment extends Fragment {
         return view;
     }
 
-    public class  onCheckedChangeListener implements CompoundButton.OnCheckedChangeListener {
+    public class onCheckedChangeListener implements CompoundButton.OnCheckedChangeListener {
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -102,17 +104,18 @@ public class SetDaysFragment extends Fragment {
         }
     }
 
-    public SetDaysFragment(){
+    public SetDaysFragment() {
 
     }
 
-    public  void sendBack(boolean[] daysArr){
-        if(setDaysFragmentListener != null){
+    public void sendBack(boolean[] daysArr) {
+        if (setDaysFragmentListener != null) {
             setDaysFragmentListener.onFragmentInteraction(daysArr);
         }
     }
-    public void update(boolean[] daysArr){
-        if(setDaysFragmentListener != null){
+
+    public void update(boolean[] daysArr) {
+        if (setDaysFragmentListener != null) {
             setDaysFragmentListener.updateActivity(daysArr);
         }
     }
@@ -120,19 +123,18 @@ public class SetDaysFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments() != null){
-            boolean[] daysArrTemp =  getArguments().getBooleanArray(DAYS_ARRAY);
-            if(daysArrTemp != null){
+        if (getArguments() != null) {
+            boolean[] daysArrTemp = getArguments().getBooleanArray(DAYS_ARRAY);
+            if (daysArrTemp != null) {
                 daysArr = daysArrTemp;
-            }
-            else{
-                daysArr = new boolean[]{false,false,false,false,false,false,false};
+            } else {
+                daysArr = new boolean[]{false, false, false, false, false, false, false};
             }
 
         }
     }
 
-    public static SetDaysFragment newInstance(boolean[] daysArr){
+    public static SetDaysFragment newInstance(boolean[] daysArr) {
         SetDaysFragment fragment = new SetDaysFragment();
         Bundle args = new Bundle();
         args.putBooleanArray(DAYS_ARRAY, daysArr);
@@ -141,14 +143,12 @@ public class SetDaysFragment extends Fragment {
     }
 
 
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if(context instanceof SetDaysFragment.SetDaysFragmentListener){
+        if (context instanceof SetDaysFragment.SetDaysFragmentListener) {
             setDaysFragmentListener = (SetDaysFragment.SetDaysFragmentListener) context;
-        }
-        else {
+        } else {
             throw new RuntimeException(context.toString() + " must implement TimeInstanceFragmentListListener");
         }
     }

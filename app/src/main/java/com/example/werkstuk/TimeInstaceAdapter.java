@@ -41,7 +41,7 @@ public class TimeInstaceAdapter extends RecyclerView.Adapter<TimeInstaceAdapter.
         holder.onSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(switchChangeListener != null){
+                if (switchChangeListener != null) {
                     TimeInstance timeInstance = timeInstanceList.get(pos);
                     timeInstance.setOn(isChecked);
                     switchChangeListener.onSwitchChange(timeInstance);
@@ -51,7 +51,7 @@ public class TimeInstaceAdapter extends RecyclerView.Adapter<TimeInstaceAdapter.
         });
     }
 
-    public void set24HoursDay(boolean _24hoursDays){
+    public void set24HoursDay(boolean _24hoursDays) {
         this._24hoursDays = _24hoursDays;
     }
 
@@ -70,16 +70,16 @@ public class TimeInstaceAdapter extends RecyclerView.Adapter<TimeInstaceAdapter.
         notifyDataSetChanged();
     }
 
-    public void resetListView(){
+    public void resetListView() {
 
         notifyDataSetChanged();
     }
 
-    public TimeInstance getTimeInstanceAt(int pos){
+    public TimeInstance getTimeInstanceAt(int pos) {
         return timeInstanceList.get(pos);
     }
 
-    class TimeInstanceHolder extends RecyclerView.ViewHolder{
+    class TimeInstanceHolder extends RecyclerView.ViewHolder {
 
         private TextView nameTextView;
         private TextView daysTextView;
@@ -95,12 +95,11 @@ public class TimeInstaceAdapter extends RecyclerView.Adapter<TimeInstaceAdapter.
             onSwitch = itemView.findViewById(R.id.switch_on);
 
 
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int pos = getAdapterPosition();
-                    if(itemClickListener != null && pos != RecyclerView.NO_POSITION){
+                    if (itemClickListener != null && pos != RecyclerView.NO_POSITION) {
                         itemClickListener.onItemClick(timeInstanceList.get(pos));
                     }
                 }
@@ -108,20 +107,20 @@ public class TimeInstaceAdapter extends RecyclerView.Adapter<TimeInstaceAdapter.
         }
     }
 
-    public interface OnClickListener{
+    public interface OnClickListener {
         void onItemClick(TimeInstance timeInstance);
     }
-    
-    public interface OnSwitchChangeListener{
+
+    public interface OnSwitchChangeListener {
         void onSwitchChange(TimeInstance timeInstance);
     }
 
 
-    public void setOnItemClickListener(OnClickListener listener){
+    public void setOnItemClickListener(OnClickListener listener) {
         this.itemClickListener = listener;
     }
-    
-    public void setOnSwitchChange(OnSwitchChangeListener listener){
+
+    public void setOnSwitchChange(OnSwitchChangeListener listener) {
         this.switchChangeListener = listener;
     }
 }

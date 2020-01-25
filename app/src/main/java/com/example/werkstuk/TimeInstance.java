@@ -147,6 +147,7 @@ public class TimeInstance {
         }
         return str.equals("");
     }
+
     //for test
     public String getDaysStrWithStr() {
 
@@ -193,61 +194,60 @@ public class TimeInstance {
         return str;
     }
 
-    public long calMiniSecForNextAlarm(){
+    public long calMiniSecForNextAlarm() {
         Date currentDate = new Date();
         Date currentDayMili = new Date(0);
         currentDayMili.setMinutes(new Date().getMinutes());
         currentDayMili.setHours(new Date().getHours());
-        if(currentDayMili.getTime() >= start.getTime() && currentDayMili.getTime() < end.getTime()){
+        if (currentDayMili.getTime() >= start.getTime() && currentDayMili.getTime() < end.getTime()) {
             return currentDate.getTime() + 1000;
         }
-        if((currentDayMili.getTime() + interval) >=  end.getTime()){
-            return (dayInMilliseconds * getNextDay()) + (dayInMilliseconds  - currentDate.getTime()) +  start.getTime() + currentDate.getTime();
+        if ((currentDayMili.getTime() + interval) >= end.getTime()) {
+            return (dayInMilliseconds * getNextDay()) + (dayInMilliseconds - currentDate.getTime()) + start.getTime() + currentDate.getTime();
         }
         return currentDate.getTime() + interval;
     }
 
-    public boolean hasADay(){
-        if(mo){
+    public boolean hasADay() {
+        if (mo) {
             return true;
         }
-        if(tu){
+        if (tu) {
             return true;
         }
-        if(we){
+        if (we) {
             return true;
         }
-        if(th){
+        if (th) {
             return true;
         }
-        if(fr){
+        if (fr) {
             return true;
         }
-        if(sa){
+        if (sa) {
             return true;
         }
-        if(su){
+        if (su) {
             return true;
         }
         return false;
     }
 
-    private int getNextDay(){
-        if(!hasADay()){
+    private int getNextDay() {
+        if (!hasADay()) {
             return 0;
         }
         SimpleDateFormat ft;
         ft = new SimpleDateFormat("u");
         int dayNumber = Integer.parseInt(ft.format(new Date()));
         boolean[] arr = getDaysArray();
-        for(int i = 0; i < arr.length; i++){
-            if(dayNumber + (i +1) > 7){
-                if(arr[dayNumber - 6 + i]){
+        for (int i = 0; i < arr.length; i++) {
+            if (dayNumber + (i + 1) > 7) {
+                if (arr[dayNumber - 6 + i]) {
                     return i;
                 }
-            }
-            else{
-                if(arr[dayNumber + i]){
+            } else {
+                if (arr[dayNumber + i]) {
                     return i;
                 }
             }
@@ -410,7 +410,7 @@ public class TimeInstance {
         }
     }
 
-    public int getIntfromEnum(){
+    public int getIntfromEnum() {
         switch (interval) {
             case 1000 * 60:
                 return 0;
@@ -474,8 +474,8 @@ public class TimeInstance {
         setIntervalByIntevalNumber(enumInterval);
     }
 
-    public TimeInstance(boolean[] arr){
-        if(arr != null){
+    public TimeInstance(boolean[] arr) {
+        if (arr != null) {
             this.mo = arr[0];
             this.tu = arr[1];
             this.we = arr[2];

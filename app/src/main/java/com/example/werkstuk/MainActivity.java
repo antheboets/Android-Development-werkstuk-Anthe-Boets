@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        adapter = new TimeInstaceAdapter(getPreferences(Context.MODE_PRIVATE).getBoolean(_24HOURS_DAY,true));
+        adapter = new TimeInstaceAdapter(getPreferences(Context.MODE_PRIVATE).getBoolean(_24HOURS_DAY, true));
         recyclerView.setAdapter(adapter);
 
         timeInstanceViewModel = ViewModelProviders.of(this).get(TimeInstanceViewModel.class);
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).attachToRecyclerView(recyclerView);
 
-        adapter.setOnItemClickListener(new TimeInstaceAdapter.OnClickListener(){
+        adapter.setOnItemClickListener(new TimeInstaceAdapter.OnClickListener() {
 
             @Override
             public void onItemClick(TimeInstance timeInstance) {
@@ -149,10 +149,9 @@ public class MainActivity extends AppCompatActivity {
             timeInstanceViewModel.insert(timeInstance);
             //resetAllAlarms(timeInstanceViewModel.getAllTimeInstances().getValue());
             Toast.makeText(this, getString(R.string.created), Toast.LENGTH_SHORT).show();
-        }
-        else if(requestCode == EDIT_TIME_INSTANCE_REQUEST && resultCode == RESULT_OK){
-            int id = data.getIntExtra(EXTRA_ID, - 1);
-            if(id == -1){
+        } else if (requestCode == EDIT_TIME_INSTANCE_REQUEST && resultCode == RESULT_OK) {
+            int id = data.getIntExtra(EXTRA_ID, -1);
+            if (id == -1) {
                 Toast.makeText(this, getString(R.string.main_cant_update_error_toast), Toast.LENGTH_SHORT).show();
             }
             String name = getString(R.string.name);
@@ -168,9 +167,8 @@ public class MainActivity extends AppCompatActivity {
             timeInstanceViewModel.update(timeInstance);
             //resetAlarm(timeInstance);
             Toast.makeText(this, getString(R.string.main_update_toast), Toast.LENGTH_SHORT).show();
-        }
-        else if(requestCode == SETTINS_REQUEST && resultCode == RESULT_OK){
-            SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFERENCES_NAME,MODE_PRIVATE);
+        } else if (requestCode == SETTINS_REQUEST && resultCode == RESULT_OK) {
+            SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE);
             adapter.set24HoursDay(sharedPref.getBoolean(_24HOURS_DAY, true));
             adapter.resetListView();
             Toast.makeText(this, getString(R.string.settingsSaved), Toast.LENGTH_SHORT).show();
@@ -203,33 +201,37 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void deleteAlarm(TimeInstance timeInstance){
-        if(timeInstance.isOn() && timeInstance.hasADay()){
+    public void deleteAlarm(TimeInstance timeInstance) {
+        if (timeInstance.isOn() && timeInstance.hasADay()) {
             removeAlarm(timeInstance);
         }
     }
-    public void deleteAllAlarms(List<TimeInstance> list){
-        for(TimeInstance instance: list){
-            if(instance.isOn() && instance.hasADay()){
+
+    public void deleteAllAlarms(List<TimeInstance> list) {
+        for (TimeInstance instance : list) {
+            if (instance.isOn() && instance.hasADay()) {
                 removeAlarm(instance);
             }
         }
     }
-    public void resetAlarm(TimeInstance timeInstance){
-        if(timeInstance.isOn() && timeInstance.hasADay()){
+
+    public void resetAlarm(TimeInstance timeInstance) {
+        if (timeInstance.isOn() && timeInstance.hasADay()) {
             removeAlarm(timeInstance);
             setAlarm(timeInstance);
         }
     }
-    public void resetAllAlarms(List<TimeInstance> list){
-        for(TimeInstance instance: list){
-            if(instance.isOn() && instance.hasADay()){
+
+    public void resetAllAlarms(List<TimeInstance> list) {
+        for (TimeInstance instance : list) {
+            if (instance.isOn() && instance.hasADay()) {
                 removeAlarm(instance);
                 setAlarm(instance);
             }
         }
     }
-    public void setAlarm(TimeInstance timeInstance){
+
+    public void setAlarm(TimeInstance timeInstance) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
         intent.putExtra(EXTRA_ID, timeInstance.getId());
@@ -242,7 +244,8 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
         alarmManager.set(AlarmManager.RTC_WAKEUP, timeInstance.calMiniSecForNextAlarm(), pendingIntent);
     }
-    public void removeAlarm(TimeInstance timeInstance){
+
+    public void removeAlarm(TimeInstance timeInstance) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);

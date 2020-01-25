@@ -17,11 +17,12 @@ import java.util.Date;
 public abstract class DatabaseSingleton extends RoomDatabase {
 
     private static DatabaseSingleton instance;
+
     public abstract TimeInstanceDAO timeInstanceDAO();
 
-    static synchronized  DatabaseSingleton getInstance(Context context){
-        if(instance == null){
-            instance = Room.databaseBuilder(context.getApplicationContext(),DatabaseSingleton.class, "talkingCloack_database")
+    static synchronized DatabaseSingleton getInstance(Context context) {
+        if (instance == null) {
+            instance = Room.databaseBuilder(context.getApplicationContext(), DatabaseSingleton.class, "talkingCloack_database")
                     .fallbackToDestructiveMigration()
                     .addCallback(roomCallback)
                     .build();
@@ -29,14 +30,15 @@ public abstract class DatabaseSingleton extends RoomDatabase {
         return instance;
     }
 
-    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback(){
+    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
             new PopulateDbAsync(instance).execute();
         }
     };
-    private  static class PopulateDbAsync extends AsyncTask<Void,Void,Void>{
+
+    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
         private TimeInstanceDAO timeInstanceDAO;
 
         public PopulateDbAsync(DatabaseSingleton databaseSingleton) {
@@ -45,9 +47,9 @@ public abstract class DatabaseSingleton extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            timeInstanceDAO.insert(new TimeInstance(true, "thuis naar station", new Date(),new Date(),true,true,true,true,true,false,false,TimeInstance.EnumInterval.ONEHOUR));
-            timeInstanceDAO.insert(new TimeInstance(false, "misc", new Date(),new Date(),false,false,false,false,false,true,true,TimeInstance.EnumInterval.ONEHOUR));
-            timeInstanceDAO.insert(new TimeInstance(false, "misc", new Date(),new Date(),false,true,true,false,true,false,true,TimeInstance.EnumInterval.ONEHOUR));
+            timeInstanceDAO.insert(new TimeInstance(true, "thuis naar station", new Date(), new Date(), true, true, true, true, true, false, false, TimeInstance.EnumInterval.ONEHOUR));
+            timeInstanceDAO.insert(new TimeInstance(false, "misc", new Date(), new Date(), false, false, false, false, false, true, true, TimeInstance.EnumInterval.ONEHOUR));
+            timeInstanceDAO.insert(new TimeInstance(false, "misc", new Date(), new Date(), false, true, true, false, true, false, true, TimeInstance.EnumInterval.ONEHOUR));
             return null;
         }
     }

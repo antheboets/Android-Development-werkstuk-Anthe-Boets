@@ -57,8 +57,8 @@ public class AddEditTimeInstanceActivity extends AppCompatActivity implements Se
             }
         });
 
-        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFERENCES_NAME,MODE_PRIVATE);
-         boolean _24HourDays = sharedPref.getBoolean(_24HOURS_DAY, true);
+        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+        boolean _24HourDays = sharedPref.getBoolean(_24HOURS_DAY, true);
 
         timePickerStart.setIs24HourView(_24HourDays);
         timePickerEnd.setIs24HourView(_24HourDays);
@@ -77,13 +77,13 @@ public class AddEditTimeInstanceActivity extends AppCompatActivity implements Se
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white);
 
         Intent intent = getIntent();
-        daysArr = new boolean[]{false,false,false,false,false,false,false};
+        daysArr = new boolean[]{false, false, false, false, false, false, false};
 
-        if(intent.hasExtra(EXTRA_ID)){
+        if (intent.hasExtra(EXTRA_ID)) {
             setTitle(getString(R.string.Edititem));
             textViewName.setText(intent.getStringExtra(EXTRA_NAME));
-            Date start = new Date(intent.getLongExtra(EXTRA_START,0));
-            Date end = new Date(intent.getLongExtra(EXTRA_END,0));
+            Date start = new Date(intent.getLongExtra(EXTRA_START, 0));
+            Date end = new Date(intent.getLongExtra(EXTRA_END, 0));
 
             timePickerStart.setCurrentMinute(start.getMinutes());
             timePickerStart.setCurrentHour(start.getHours());
@@ -91,20 +91,19 @@ public class AddEditTimeInstanceActivity extends AppCompatActivity implements Se
             timePickerEnd.setCurrentMinute(end.getMinutes());
             timePickerEnd.setCurrentHour(end.getHours());
 
-            numberPicker.setValue(intent.getIntExtra(EXTRA_TIMEINTERVAL,0));
+            numberPicker.setValue(intent.getIntExtra(EXTRA_TIMEINTERVAL, 0));
             boolean[] daysArrTemp = intent.getBooleanArrayExtra(EXTRA_DAYS);
-            if(daysArrTemp != null) {
+            if (daysArrTemp != null) {
                 daysArr = daysArrTemp;
             }
             TimeInstance timeInstanceTemp = new TimeInstance(daysArr);
             daysButton.setText(timeInstanceTemp.getDaysStr());
-        }
-        else {
+        } else {
             setTitle(getString(R.string.Additem));
         }
     }
 
-    public void openFragment(){
+    public void openFragment() {
         daysButton.setOnClickListener(null);
         SetDaysFragment fragment = SetDaysFragment.newInstance(daysArr);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -154,9 +153,9 @@ public class AddEditTimeInstanceActivity extends AppCompatActivity implements Se
         }
 
         Intent data = new Intent();
-        int id = getIntent().getIntExtra(EXTRA_ID,-1);
+        int id = getIntent().getIntExtra(EXTRA_ID, -1);
 
-        if(id != -1){
+        if (id != -1) {
             data.putExtra(EXTRA_ID, id);
         }
 
