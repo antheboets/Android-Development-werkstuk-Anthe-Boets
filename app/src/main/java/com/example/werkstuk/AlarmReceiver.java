@@ -38,6 +38,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         TimeInstanceRepository repository = new TimeInstanceRepository(((Application) context.getApplicationContext()));
         int id = intent.getIntExtra(EXTRA_ID, -1);
+        TimeInstance timeInstancea = repository.getByIdIsOn(id);
         if (id != -1) {
             boolean on = intent.getBooleanExtra(EXTRA_ON, false);
 

@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_DAYS, timeInstance.getDaysArray());
         intent.putExtra(EXTRA_TIMEINTERVAL, timeInstance.getIntfromEnum());
         intent.putExtra(EXTRA_ON, timeInstance.isOn());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
         alarmManager.set(AlarmManager.RTC_WAKEUP, timeInstance.calMiniSecForNextAlarm(), pendingIntent);
     }
     public void removeAlarm(TimeInstance timeInstance){

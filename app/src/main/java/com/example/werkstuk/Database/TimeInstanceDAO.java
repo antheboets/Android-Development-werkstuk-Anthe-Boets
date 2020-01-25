@@ -26,6 +26,15 @@ public interface TimeInstanceDAO {
     @Query("SELECT * FROM timeInstance_table")
     LiveData<List<TimeInstance>> getAllTimeInstances();
 
+    @Query("SELECT * FROM timeInstance_table WHERE `on` = 1")
+    List<TimeInstance> getAllTimeInstancesListIsOn();
+
+    /*
+    @Query("SELECT * FROM timeInstance_table WHERE id = :id AND `on` = 1")
+    TimeInstance getByeIdAndIsOn(long id);
+    */
+
     @Query("DELETE FROM timeInstance_table")
     void deleteAll();
+
 }

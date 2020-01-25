@@ -13,24 +13,25 @@ public class TimeInstanceRepository {
 
     private TimeInstanceDAO timeInstanceDAO;
     private LiveData<List<TimeInstance>> timeInstancesList;
+    private List<TimeInstance> timeInstancesListIsOn;
 
     public TimeInstanceRepository(Application application) {
         DatabaseSingleton databaseSingleton = DatabaseSingleton.getInstance(application);
         timeInstanceDAO = databaseSingleton.timeInstanceDAO();
         timeInstancesList = timeInstanceDAO.getAllTimeInstances();
-
-
+        timeInstancesListIsOn = timeInstanceDAO.getAllTimeInstancesListIsOn();
     }
+
     public void insert(TimeInstance timeInstance) {
-        new InserTimeInstaceAsync(timeInstanceDAO).execute(timeInstance);
+        new InserTimeInstanceAsync(timeInstanceDAO).execute(timeInstance);
     }
 
     public void update(TimeInstance timeInstance) {
-        new  UpdateTimeInstaceAsync(timeInstanceDAO).execute(timeInstance);
+        new UpdateTimeInstanceAsync(timeInstanceDAO).execute(timeInstance);
     }
 
     public void delete(TimeInstance timeInstance) {
-        new DeleteTimeInstaceAsync(timeInstanceDAO).execute(timeInstance);
+        new DeleteTimeInstanceAsync(timeInstanceDAO).execute(timeInstance);
     }
 
     public void deleteAll() {
@@ -41,25 +42,44 @@ public class TimeInstanceRepository {
         return timeInstancesList;
     }
 
-    public TimeInstance getById(int id){
+    public TimeInstance getByIdIsOn(long id){
 
-        List<TimeInstance> list = timeInstancesList.getValue();
-        if(list == null){
-            return null;
-        }
-        for (TimeInstance item: list) {
-            if(item.getId() == id){
-                return item;
+        if(timeInstancesListIsOn != null){
+            for (TimeInstance item: timeInstancesListIsOn) {
+                if (item.getId() == id) {
+                    return item;
+                }
             }
         }
         return null;
     }
-
-    private static class InserTimeInstaceAsync extends AsyncTask<TimeInstance, Void, Void>{
+    /*
+    private static class GetTimeInstanceByeIdAsync extends AsyncTask<Long, Void, TimeInstance>{
 
         private TimeInstanceDAO timeInstanceDAO;
 
-        public InserTimeInstaceAsync(TimeInstanceDAO timeInstanceDAO) {
+        public GetTimeInstanceByeIdAsync(TimeInstanceDAO timeInstanceDAO) {
+            this.timeInstanceDAO = timeInstanceDAO;
+        }
+
+        @Override
+        protected TimeInstance doInBackground(Long... longs) {
+            return timeInstanceDAO.getByeIdAndIsOn(longs[0]);
+        }
+
+        @Override
+        protected void onPostExecute(TimeInstance timeInstance) {
+            super.onPostExecute(timeInstance);
+
+        }
+    }
+    */
+
+    private static class InserTimeInstanceAsync extends AsyncTask<TimeInstance, Void, Void>{
+
+        private TimeInstanceDAO timeInstanceDAO;
+
+        public InserTimeInstanceAsync(TimeInstanceDAO timeInstanceDAO) {
             this.timeInstanceDAO = timeInstanceDAO;
         }
 
@@ -69,11 +89,11 @@ public class TimeInstanceRepository {
             return null;
         }
     }
-    private static class UpdateTimeInstaceAsync extends AsyncTask<TimeInstance, Void, Void>{
+    private static class UpdateTimeInstanceAsync extends AsyncTask<TimeInstance, Void, Void>{
 
         private TimeInstanceDAO timeInstanceDAO;
 
-        public UpdateTimeInstaceAsync(TimeInstanceDAO timeInstanceDAO) {
+        public UpdateTimeInstanceAsync(TimeInstanceDAO timeInstanceDAO) {
             this.timeInstanceDAO = timeInstanceDAO;
         }
 
@@ -83,11 +103,11 @@ public class TimeInstanceRepository {
             return null;
         }
     }
-    private static class DeleteTimeInstaceAsync extends AsyncTask<TimeInstance, Void, Void>{
+    private static class DeleteTimeInstanceAsync extends AsyncTask<TimeInstance, Void, Void>{
 
         private TimeInstanceDAO timeInstanceDAO;
 
-        public DeleteTimeInstaceAsync(TimeInstanceDAO timeInstanceDAO) {
+        public DeleteTimeInstanceAsync(TimeInstanceDAO timeInstanceDAO) {
             this.timeInstanceDAO = timeInstanceDAO;
         }
 
@@ -97,6 +117,9 @@ public class TimeInstanceRepository {
             return null;
         }
     }
+
+
+
     private static class DeleteAllTimeInstaceAsync extends AsyncTask<TimeInstance, Void, Void>{
 
         private TimeInstanceDAO timeInstanceDAO;
