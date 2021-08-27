@@ -13,13 +13,17 @@ public class TimeInstanceRepository {
 
     private TimeInstanceDAO timeInstanceDAO;
     private LiveData<List<TimeInstance>> timeInstancesList;
-    private List<TimeInstance> timeInstancesListIsOn;
+    private static List<TimeInstance> timeInstancesListIsOn;
 
     public TimeInstanceRepository(Application application) {
         DatabaseSingleton databaseSingleton = DatabaseSingleton.getInstance(application);
         timeInstanceDAO = databaseSingleton.timeInstanceDAO();
         timeInstancesList = timeInstanceDAO.getAllTimeInstances();
-        timeInstancesListIsOn = timeInstanceDAO.getAllTimeInstancesListIsOn();
+        new GetAll(timeInstanceDAO).execute();
+    }
+
+    public static void setTimeInstancesListIsOn(List<TimeInstance> timeInstancesListIsOn) {
+        TimeInstanceRepository.timeInstancesListIsOn = timeInstancesListIsOn;
     }
 
     public void insert(TimeInstance timeInstance) {
@@ -136,4 +140,22 @@ public class TimeInstanceRepository {
         }
     }
 
+    private static class GetAll extends AsyncTask<Void,Void,List<TimeInstance>>{
+
+        private TimeInstanceDAO timeInstanceDAO;
+
+        public GetAll(TimeInstanceDAO timeInstanceDAO) {
+            this.timeInstanceDAO = timeInstanceDAO;
+        }
+
+        @Override
+        protected List<TimeInstance> doInBackground(Void... voids) {
+            return timeInstanceDAO.getAllTimeInstancesListIsOn();
+        }
+
+        @Override
+        protected void onPostExecute(List<TimeInstance> timeInstances) {
+            setTimeInstancesListIsOn(timeInstances);
+        }
+    }
 }
